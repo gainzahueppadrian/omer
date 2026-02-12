@@ -207,7 +207,7 @@ class ScannerAgent:
 
         # Step 4: Calibrate RND model
         rnd = RNDModel()
-        r = 0.05  # risk-free rate
+        r = self.config.get("strategy", {}).get("risk_free_rate", 0.05)  # risk-free rate
         try:
             rnd.calibrate(spot, T, r, atm_iv, rr_25, str_25)
             self.rnd_models[symbol] = rnd
