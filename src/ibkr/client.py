@@ -586,9 +586,12 @@ class IBClient(EWrapper, EClient):
     def get_account_value_sync(self, key: str = "NetLiquidation") -> float:
         """Get account value."""
         self._account_event.clear()
+        req_id = self._get_req_id()
         self.reqAccountSummary(
-            self._get_req_id(), "All",
+            req_id, "All",
             "NetLiquidation,TotalCashValue,BuyingPower,GrossPositionValue"
         )
         self._account_event.wait(timeout=self.timeout)
+        self.cancelAccountSummary(req_id)
+        return self._account_values.get(key, 0.0)
         return self._account_values.get(key, 0.0)
