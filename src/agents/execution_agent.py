@@ -73,7 +73,7 @@ class ExecutionAgent:
             try:
                 priority, timestamp, message = self._queue.get(timeout=1.0)
                 self._process_message(message)
-            except Exception:
+            except queue.Empty:
                 continue
 
     def _process_message(self, message: AgentMessage):
