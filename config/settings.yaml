@@ -1,0 +1,68 @@
+# ============================================================
+# LEAPS PUTS Multi-Agent Trading System Configuration
+# ============================================================
+
+ibkr:
+  host: "127.0.0.1"
+  port: 7497          # 7497 = paper, 7496 = live
+  client_id: 1
+  mode: "paper"       # "paper" or "live"
+  market_data_type: 3  # 1=Live, 2=Frozen, 3=Delayed, 4=Delayed-Frozen
+  timeout_seconds: 10
+  max_retries: 3
+
+strategy:
+  watchlist:
+    - "AAPL"
+    - "MSFT"
+    - "KMB"
+    - "JNJ"
+    - "PG"
+    - "KO"
+    - "PEP"
+    - "MMM"
+    - "XOM"
+    - "CVX"
+  leaps:
+    min_dte: 270         # ~9 months minimum
+    max_dte: 548         # ~18 months maximum
+    target_dte: 365      # ~1 year ideal
+    min_delta: -0.30     # minimum put delta (absolute)
+    max_delta: -0.45     # maximum put delta (absolute)
+    min_annualized_return: 0.10   # 10% minimum
+    target_annualized_return: 0.14  # 14% target
+    max_risk_of_reversal: 0.25    # max 25% assignment probability
+  bonus_calls:
+    enabled: true
+    max_premium_allocation: 0.50  # use up to 50% of put premium for calls
+    call_delta_target: 0.40
+  filters:
+    min_iv_percentile: 60    # IV must be above 60th percentile
+    min_open_interest: 100
+    max_bid_ask_spread_pct: 0.05  # 5% max spread
+    min_underlying_price: 20.0
+    max_underlying_price: 500.0
+
+risk:
+  max_portfolio_delta: -500
+  max_single_position_pct: 0.15   # 15% of portfolio in one name
+  max_total_notional_pct: 0.80    # 80% of account
+  max_gamma_exposure: 100
+  base_allocation_pct: 0.10
+  margin_safety_factor: 1.5
+  dynamic_adjustments:
+    high_vol_threshold: 0.35    # VIX > 35 => reduce size
+    low_vol_threshold: 0.15     # VIX < 15 => increase size
+    skew_warning_threshold: -0.03
+    kurtosis_warning_threshold: 4.0
+
+agents:
+  scan_interval_seconds: 300    # 5 minutes between scans
+  heartbeat_interval: 30
+  max_concurrent_tasks: 5
+  orchestrator_cycle_seconds: 60
+
+logging:
+  level: "INFO"
+  file: "logs/leaps_trading.log"
+  console: true
