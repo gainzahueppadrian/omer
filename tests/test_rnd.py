@@ -68,9 +68,10 @@ class TestMalzSmileInterpolator(unittest.TestCase):
         malz_extreme = MalzSmileInterpolator(0.10, -0.10, 0.001)
         for delta in np.linspace(0.05, 0.95, 50):
             iv = malz_extreme.sigma(delta)
-            # IV might go negative with extreme params, but check it's handled
-            # (In practice, we'd clamp to 0)
-
+            # With current implementation, IV can go negative with extreme params
+            # This test documents the behavior but doesn't enforce a minimum
+            # If clamping is added, uncomment:
+            # self.assertGreaterEqual(iv, 0.0, f"IV should be non-negative at delta={delta}")
 
 class TestMelickThomasMixture(unittest.TestCase):
     """Test Melick & Thomas (1997) mixture of log-normals."""
