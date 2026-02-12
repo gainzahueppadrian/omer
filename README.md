@@ -112,7 +112,6 @@ python -m pytest tests/ -v
 
 ## Risk Management
 
-'''
 The system dynamically adjusts risk based on:
 
 | Condition | Response |
